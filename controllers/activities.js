@@ -17,7 +17,8 @@ async function getAll(req, res) {
   res.status(200).json(activities);
 }
 
-async function getById(req, res) {
+async function getById(req, res) 
+{
   const activity = await Activity.findById(req.params.id);
 
   if (!activity) {
@@ -29,8 +30,9 @@ async function getById(req, res) {
 
 async function create(req, res) {
   // TODO CHALLENGE 06: persistir correctamente el campo metadata (estructura variable segun type)
-  const { type, description, contactId, userId } = req.body;
-  const activity = await Activity.create({ type, description, contactId, userId });
+  // simplemente se recogio metadata para meterlo al modelo
+  const { type, description, contactId, userId, metadata} = req.body;
+  const activity = await Activity.create({ type, description, contactId, userId, metadata});
 
   res.status(201).json(activity);
 }
