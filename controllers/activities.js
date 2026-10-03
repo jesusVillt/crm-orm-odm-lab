@@ -3,10 +3,17 @@ const Activity = require('../models/mongoose/activity');
 
 async function getAll(req, res) {
   // TODO CHALLENGE 04: construir el filtro de Mongoose a partir de req.query.type
-  const filter = {};
+  let filter = {};
+
+  // si viene, echamos el resultado en la variable filter, si no pues se habrá quedado igual
+  if(req.query.type)
+  {
+    filter = {type: req.query.type};
+  }
+  
   // TODO CHALLENGE 02: recuperar las actividades con Mongoose
   // con Mongoose la diferencia es que ya no usamos findAll(), aqui es find
-  activities = await activity.find();
+  activities = await activity.find(filter);
   res.status(200).json(activities);
 }
 

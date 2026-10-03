@@ -19,14 +19,14 @@ async function getAll(req, res) {
   res.status(200).json(companies);
 }
 
-async function getById(req, res) {
+async function getById(req, res) 
+{
   // TODO CHALLENGE 05: la respuesta debe incluir los contactos de la compañía
   const company = await Company.findByPk(req.params.id);
 
   if (!company) {
     return res.status(404).json({ error: 'Company not found' });
   }
-
   res.status(200).json(company);
 }
 
