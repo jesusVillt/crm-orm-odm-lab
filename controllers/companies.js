@@ -1,4 +1,7 @@
 const { Company } = require('../models/sequelize');
+const {Contact} = require('../models/sequelize');
+// asi ya no me funciono :(
+//const {Contact} = require('../models/sequelize/Contact');
 
 async function getAll(req, res) {
   // TODO CHALLENGE 03: construir el filtro de Sequelize a partir de req.query.industry
@@ -22,11 +25,13 @@ async function getAll(req, res) {
 async function getById(req, res) 
 {
   // TODO CHALLENGE 05: la respuesta debe incluir los contactos de la compañía
-  const company = await Company.findByPk(req.params.id);
+  // le pedimos que nos muestre tambien todos los contactos con los que se relaciona compañia
+  const company = await Company.findByPk(req.params.id, {include:{model: Contact , as: 'contacts'}} );
 
   if (!company) {
     return res.status(404).json({ error: 'Company not found' });
   }
+
   res.status(200).json(company);
 }
 
