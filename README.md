@@ -86,3 +86,60 @@ Cada suite restablece PostgreSQL y MongoDB antes de ejecutarse y cierra las cone
 | DELETE | `/activities/:id` | Eliminar actividad |
 
 Los errores se devuelven como JSON: `{ "error": "Contact not found" }`.
+
+
+## Respuestas
+
+**1. Dos motores.**
+Activity es buen candidato para un base documental ya que, como se puede ver en el codigo, es un esquema flexible,
+si nos vamos a seed.js y nos fijamos en activities vemos que existe el campo metadata el cual tiene una estructura diferente
+para cada documento. Por otro lado user, company y contact tiene una estructura más clara, también company y contact establecen
+una relación entre si.
+
+**2. ORM vs ODM.**
+Me gusta entender al ORM y al ODM como herramientas que nos permiten llevar nuestra base de datos hacia adentro de 
+nuestro código a través de objetos. En este trabajo se utilizó Mongoose y Sequelize, su principal diferencia esta
+en que Mongoose es un ODM, o sea es orientado a documentos, mientras que Sequelize es para el modelo relacional.
+
+
+
+**3. Configuración por variables de entorno.**
+Las credenciales están definidas desde el punto .env.example de la aplicación,no es buena práctica ponerlas
+en cualquier otro lado, pues al subirlas al repositorio las estaríamos exponiendo, lo correcto sería
+que el .env quedará oculto antes de subirlo al repositorio. En cuanto los nombres
+de los host utilizados para conectarnos con PostgreSQL y MongoDB estos son: postgres y mongo.Gracias a que con Docker podemos
+usar los nombres de los servicios como si fueran los de un host, por eso no ponemos tal cual "localhost".
+
+
+**4. Asociacones.**
+Una compañía tiene muchos contactos, pero un contacto está asociado únicamente a una compañía. La
+llave foránea es companyId que vive en la tablita de contactos, pues de esa forma se puede cumplir que
+una misma compañía tenga asociados muchos contactos. El alias contacts nos sirve para nombrar la
+relación y luego la podemos usar, de hecho en uno de los retos teníamos que traer los contactos
+asociados a cada compañía, para eso es este alias, pues en este caso es el que nos permite
+decir que una compañía tiene varios contactos.
+
+
+
+**5. Eager loading.**
+Eager loading. En el Reto 05, ¿qu ́e diferencia habr ́ıa entre traer la compa ̃n ́ıa
+y luego hacer una segunda consulta para sus contactos, y traerlos en la misma
+consulta con include? ¿Cu ́al es preferible y por qu ́e?
+La diferencia estaría pues en la cantidad de consultas que terminaríamos haciendo. 
+Si ya sabemos que siempre vamos a necesitar estos datos juntos, entonces es más optimo de esta 
+forma, en vez de tener que hacer consultas separadas.
+
+**6. Instancia vs consulta.**
+La ventaja principal está en que, en el update que usamos en contactos, tenemos
+acceso a la instancia, desde antes, lo que significa que podemos acceder a sus atributos. Mientras
+que en el segundo enfoque simplemente se modifica, ya no podemos acceder a él.
+
+
+
+## Evidencia
+<img width="679" height="319" alt="imagen" src="https://github.com/user-attachments/assets/332ffc46-4cb9-49bb-a41a-f7360763fc82" />
+
+
+
+
+
