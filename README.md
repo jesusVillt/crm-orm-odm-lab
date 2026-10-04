@@ -179,9 +179,9 @@ afterAll(async () => {
 **12. Tu experiencia.**
 En lo personal para mí el reto más difícil fue el número 7, pues fue el que más tiempo
 me tomó resolver debido a una serie de distracciones. Para empezar estaba tratando de modificar, sin darme
-cuenta, el objeto a través del modelo, o sea tenía:
+cuenta, el objeto a través del modelo, o sea tenía: \
 await Contact.update(req.body, { fields: ['firstName', 'lastName', 'email', 'phone', 'companyId'] });
-en lugar de:
+en lugar de: \
 await contact.update(req.body, { fields: ['firstName', 'lastName', 'email', 'phone', 'companyId'] });
 Ese pequeño error pasó desapercibido, por mucho tiempo y estaba convencido de que algo estaba mal
 con la lógica, pero solo fue un error de escritura.
