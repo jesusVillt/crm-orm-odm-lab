@@ -134,6 +134,57 @@ La ventaja principal está en que, en el update que usamos en contactos, tenemos
 acceso a la instancia, desde antes, lo que significa que podemos acceder a sus atributos. Mientras
 que en el segundo enfoque simplemente se modifica, ya no podemos acceder a él.
 
+**7. Esquema flexible.**
+El tipo de dato es mongoose.Schema.Types.Mixed, este es el que nos hace la magia
+de poder guardar diferentes tipos de estructuras sin problemas, la desventaja 
+es precisamente su ventaja: podemos guardar cualquier tipo de cosa, entonces las 
+validaciones se nos pueden complicar.
+
+**8. Sin ref.**
+No podemos hacer uso de populate en este caso, porque para que esto funcionara
+implicaría que tanto users como contacts fueran también documentos de Mongodb, pues populate
+solo funciona para estos. En cuanto a las consecuencias de integridad, el problema que tenemos es que si
+por ejemplo borramos un usuario, entonces este todavía aparecerá ahí referenciado en Activity.
+
+**9. Documento actualizado.**
+Devolvía el documento antes de ser actualizado, pues es el comportamiento por defecto
+que tiene findByIdAndUpdate. Para solucionar esto se le paso como parámetro el siguiente 
+objeto: { new: true }. De esta forma ya regresaba el objeto actualizado. 
+
+**10. Pruebas de comportamiento.**
+Probar el comportamiento tiene la principal ventaja de que queda más abierta la 
+solución. Cada quien tiene un razonamiento diferente y pudo haber encontrado 
+una solución más simple, más compleja, pero en este caso basta con que 
+haga lo que deba de hacer.
+
+
+**11. Repetibilidad.**
+Este código nos cierra las conexiones con las bases de datos y también las regresas
+a su estado inicial, como podemos intuir del reset(). Esto permite que las bases de datos
+tengan el estado que se les dio en el archivo seed.js y así unas pruebas no se terminan
+afectando con otras, pues todas terminan partiendo de la misma base de datos.
+
+beforeAll(async () => {
+  await connectSequelize();
+  await connectMongoose();
+  await reset();
+});
+
+afterAll(async () => {
+  await closeSequelize();
+  await closeMongoose();
+});
+
+
+**12. Tu experiencia.**
+En lo personal para mí el reto más difícil fue el número 7, pues fue el que más tiempo
+me tomó resolver debido a una serie de distracciones. Para empezar estaba tratando de modificar, sin darme
+cuenta, el objeto a través del modelo, o sea tenía:
+await Contact.update(req.body, { fields: ['firstName', 'lastName', 'email', 'phone', 'companyId'] });
+en lugar de:
+await contact.update(req.body, { fields: ['firstName', 'lastName', 'email', 'phone', 'companyId'] });
+Ese pequeño error pasó desapercibido, por mucho tiempo y estaba convencido de que algo estaba mal
+con la lógica, pero solo fue un error de escritura.
 
 
 ## Evidencia
